@@ -69,3 +69,27 @@ impl Color {
         }
     }
 }
+
+
+
+#[derive(Debug, Clone, Copy)]
+pub struct Style {
+    fg_color: Option<Color>,
+    bg_color: Option<Color>,
+    bold: bool,
+    italic: bool,
+    underline: bool,
+}
+
+
+impl Default for Style {
+    fn default() -> Self {
+        Style {
+            fg_color: None,
+            bg_color: None,
+            bold: false,
+            italic: false,
+            underline: false,
+        }
+    }
+}

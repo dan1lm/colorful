@@ -127,5 +127,46 @@ impl Style {
 
 
 
+    fn format_prefix(&self) -> String {
+        let mut codes = Vec::new();
+
+        if let Some(fg) = self.fg_color {
+            codes.push(fg.fg_code().to_string());
+        }
+
+        if let Some(bg) = self.bg_color {
+            codes.push(bg.bg_code().to_string());
+        }
+
+        if self.bold {
+            codes.push("1".to_string());
+        }
+
+        if self.italic {
+            codes.push("3".to_string());
+        }
+
+        if self.underline {
+            codes.push("4".to_string());
+        }
+
+        if codes.is_empty() {
+            return String::new();
+        }
+
+        format!("\x1b[{}m", codes.join(";"))
+    }
+
+    fn format_suffix() -> &'static str {
+        "\x1b[0m"
+    }
+
+
+    pub fn paint<T: AsRef<str>>(&self, text: T) -> ColoredString {
+        ColoredString {
+            text: text.as_ref().to_string(),
+            style: *self,
+        }
+    }
 
 }

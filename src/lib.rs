@@ -93,3 +93,19 @@ impl Default for Style {
         }
     }
 }
+
+impl Style {
+    pub fn new() -> Self {               
+        Style::default()
+    }
+
+    pub fn fg(mut self, color: Color) -> Self {
+        self.fg_color = Some(color);
+        self
+    }
+
+
+
+
+
+}

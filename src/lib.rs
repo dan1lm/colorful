@@ -98,9 +98,29 @@ impl Style {
     pub fn new() -> Self {               
         Style::default()
     }
-
+    // note: look into a better implementation
     pub fn fg(mut self, color: Color) -> Self {
         self.fg_color = Some(color);
+        self
+    }
+
+    pub fn bg(mut self, color: Color) -> Self {
+        self.bg_color = Some(color);
+        self
+    }
+
+    pub fn bold(mut self) -> Self {
+        self.bold = true;
+        self
+    }
+
+    pub fn italic(mut self) -> Self {
+        self.italic = true;
+        self
+    }
+
+    pub fn underline(mut self) -> Self {
+        self.underline = true;
         self
     }
 

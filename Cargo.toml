@@ -1,16 +1,14 @@
 [package]
-name = "colorful"
+name = "whitelight"
 version = "0.1.0"
 edition = "2024"
 authors = ["Danil Merinov <danil.d.merinov@gmail.com>"]
 description = "A simple library for coloring terminal text in Rust"
 license = "MIT"
-repository = "https://github.com/dan1lm/colorful"
+repository = "https://github.com/dan1lm/whitelight"
 keywords = ["terminal", "color", "cli"]
 categories = ["command-line-interface"]
 
 [lib]
-name="colorful"
+name="whitelight"
 path="src/lib.rs"
-
-

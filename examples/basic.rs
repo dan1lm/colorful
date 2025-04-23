@@ -1,4 +1,4 @@
-use colorful::*;
+use whitelight::*;
 
 fn main() {
     println!("{}", red("This text is red!"));

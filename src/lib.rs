@@ -176,3 +176,15 @@ pub struct ColoredString {
     text: String,
     style: Style,
 }
+
+
+impl fmt::Display for ColoredString {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let prefix = self.style.format_prefix();
+        if prefix.is_empty() {
+            write!(f, "{}", self.text)
+        } else {
+            write!(f, "{}{}{}", prefix, self.text, Style::format_suffix())
+        }
+    }
+}

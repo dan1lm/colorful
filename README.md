@@ -1,5 +1,7 @@
 # white_light
 
+"White light is visible light that contains all the colors of the visible spectrum combined in roughly equal proportions"
+
 A powerful, zero-dependency Rust library for adding colors and styles to terminal text.
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)

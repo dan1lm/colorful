@@ -293,3 +293,34 @@ impl<T: AsRef<str>> Colorize for T {
         Style::new().bg(color).paint(self)
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_red_text() {
+        let colored = red("This is red text");
+        assert_eq!(colored.to_string(), "\x1b[31mThis is red text\x1b[0m");
+    }
+
+    #[test]
+    fn test_colorize_trait() {
+        let colored = "Blue text".blue();
+        assert_eq!(colored.to_string(), "\x1b[34mBlue text\x1b[0m");
+    }
+
+    #[test]
+    fn test_combined_styles() {
+        let styled = Style::new()
+            .fg(Color::Green)
+            .bg(Color::Black)
+            .bold()
+            .paint("Bold green text on black background");
+        assert_eq!(
+            styled.to_string(),
+            "\x1b[32;40;1mBold green text on black background\x1b[0m"
+        );
+    }
+}

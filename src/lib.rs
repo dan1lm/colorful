@@ -1,5 +1,6 @@
 use std::fmt;
 
+// Standard text colors
 #[derive(Debug, Clone, Copy)]
 pub enum Color {
     Black,
@@ -20,9 +21,21 @@ pub enum Color {
     BrightWhite,
 }
 
+//  RGB color with 24-bit color depth (16.7 million colors)
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct RgbColor {
+    pub r: u8,
+    pub g: u8,
+    pub b: u8,
+}
+
+impl RgbColor {
+    pub fn new(r: u8, g: u8, b: u8) -> Self {
+        RgbColor { r, g, b }
+    }
+}
 
 impl Color {
-
     //  ANSI color code
     // foreground color
     fn fg_code(&self) -> u8 {
@@ -48,7 +61,6 @@ impl Color {
 
     // background color
     fn bg_code(&self) -> u8 {
-
         match self {
             Color::Black => 40,
             Color::Red => 41,
@@ -70,23 +82,24 @@ impl Color {
     }
 }
 
-
-
 #[derive(Debug, Clone, Copy)]
 pub struct Style {
     fg_color: Option<Color>,
     bg_color: Option<Color>,
+    fg_rgb_color: Option<RgbColor>,
+    bg_rgb_color: Option<RgbColor>,
     bold: bool,
     italic: bool,
     underline: bool,
 }
-
 
 impl Default for Style {
     fn default() -> Self {
         Style {
             fg_color: None,
             bg_color: None,
+            fg_rgb_color: None,
+            bg_rgb_color: None,
             bold: false,
             italic: false,
             underline: false,
@@ -95,17 +108,33 @@ impl Default for Style {
 }
 
 impl Style {
-    pub fn new() -> Self {               
+    pub fn new() -> Self {
         Style::default()
     }
+
     // note: look into a better implementation
     pub fn fg(mut self, color: Color) -> Self {
         self.fg_color = Some(color);
+        self.fg_rgb_color = None; // Clear RGB color when setting standard color
         self
     }
 
     pub fn bg(mut self, color: Color) -> Self {
         self.bg_color = Some(color);
+        self.bg_rgb_color = None;
+        self
+    }
+
+    // New methods for RGB colors
+    pub fn fg_rgb(mut self, r: u8, g: u8, b: u8) -> Self {
+        self.fg_rgb_color = Some(RgbColor::new(r, g, b));
+        self.fg_color = None; // Clear standard color when setting RGB color
+        self
+    }
+
+    pub fn bg_rgb(mut self, r: u8, g: u8, b: u8) -> Self {
+        self.bg_rgb_color = Some(RgbColor::new(r, g, b));
+        self.bg_color = None;
         self
     }
 
@@ -124,18 +153,27 @@ impl Style {
         self
     }
 
-
-
-
     fn format_prefix(&self) -> String {
         let mut codes = Vec::new();
 
+        // Standard foreground color
         if let Some(fg) = self.fg_color {
             codes.push(fg.fg_code().to_string());
         }
 
+        // RGB foreground color
+        if let Some(rgb) = self.fg_rgb_color {
+            codes.push(format!("38;2;{};{};{}", rgb.r, rgb.g, rgb.b));
+        }
+
+        // Standard background color
         if let Some(bg) = self.bg_color {
             codes.push(bg.bg_code().to_string());
+        }
+
+        // RGB background color
+        if let Some(rgb) = self.bg_rgb_color {
+            codes.push(format!("48;2;{};{};{}", rgb.r, rgb.g, rgb.b));
         }
 
         if self.bold {
@@ -161,22 +199,19 @@ impl Style {
         "\x1b[0m"
     }
 
-
     pub fn paint<T: AsRef<str>>(&self, text: T) -> ColoredString {
         ColoredString {
             text: text.as_ref().to_string(),
             style: *self,
         }
     }
-
 }
 
 #[derive(Debug, Clone)]
 pub struct ColoredString {
-    text: String,
+    pub text: String, // Made public to allow easy access
     style: Style,
 }
-
 
 impl fmt::Display for ColoredString {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -189,7 +224,7 @@ impl fmt::Display for ColoredString {
     }
 }
 
-
+// Standard color helper functions
 pub fn red<T: AsRef<str>>(text: T) -> ColoredString {
     Style::new().fg(Color::Red).paint(text)
 }
@@ -222,6 +257,14 @@ pub fn black<T: AsRef<str>>(text: T) -> ColoredString {
     Style::new().fg(Color::Black).paint(text)
 }
 
+// RGB color helper functions
+pub fn rgb<T: AsRef<str>>(r: u8, g: u8, b: u8, text: T) -> ColoredString {
+    Style::new().fg_rgb(r, g, b).paint(text)
+}
+
+pub fn on_rgb<T: AsRef<str>>(r: u8, g: u8, b: u8, text: T) -> ColoredString {
+    Style::new().bg_rgb(r, g, b).paint(text)
+}
 
 pub trait Colorize {
     fn red(&self) -> ColoredString;
@@ -237,8 +280,10 @@ pub trait Colorize {
     fn underline(&self) -> ColoredString;
     fn color(&self, color: Color) -> ColoredString;
     fn bg_color(&self, color: Color) -> ColoredString;
+    
+    fn rgb(&self, r: u8, g: u8, b: u8) -> ColoredString;
+    fn on_rgb(&self, r: u8, g: u8, b: u8) -> ColoredString;
 }
-
 
 impl<T: AsRef<str>> Colorize for T {
     fn red(&self) -> ColoredString {
@@ -292,6 +337,14 @@ impl<T: AsRef<str>> Colorize for T {
     fn bg_color(&self, color: Color) -> ColoredString {
         Style::new().bg(color).paint(self)
     }
+    
+    fn rgb(&self, r: u8, g: u8, b: u8) -> ColoredString {
+        Style::new().fg_rgb(r, g, b).paint(self)
+    }
+    
+    fn on_rgb(&self, r: u8, g: u8, b: u8) -> ColoredString {
+        Style::new().bg_rgb(r, g, b).paint(self)
+    }
 }
 
 impl AsRef<str> for ColoredString {
@@ -326,6 +379,37 @@ mod tests {
         assert_eq!(
             styled.to_string(),
             "\x1b[32;40;1mBold green text on black background\x1b[0m"
+        );
+    }
+    
+    #[test]
+    fn test_rgb_color() {
+        let colored = rgb(255, 100, 50, "RGB text");
+        assert_eq!(colored.to_string(), "\x1b[38;2;255;100;50mRGB text\x1b[0m");
+    }
+    
+    #[test]
+    fn test_rgb_trait_method() {
+        let colored = "RGB trait".rgb(50, 100, 255);
+        assert_eq!(colored.to_string(), "\x1b[38;2;50;100;255mRGB trait\x1b[0m");
+    }
+    
+    #[test]
+    fn test_bg_rgb_color() {
+        let colored = on_rgb(50, 100, 255, "Background RGB");
+        assert_eq!(colored.to_string(), "\x1b[48;2;50;100;255mBackground RGB\x1b[0m");
+    }
+    
+    #[test]
+    fn test_complex_rgb_styling() {
+        let styled = Style::new()
+            .fg_rgb(255, 50, 50)
+            .bg_rgb(20, 20, 50)
+            .bold()
+            .paint("Complex RGB styling");
+        assert_eq!(
+            styled.to_string(),
+            "\x1b[38;2;255;50;50;48;2;20;20;50;1mComplex RGB styling\x1b[0m"
         );
     }
 }

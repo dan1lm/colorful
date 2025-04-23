@@ -188,3 +188,36 @@ impl fmt::Display for ColoredString {
         }
     }
 }
+
+
+pub fn red<T: AsRef<str>>(text: T) -> ColoredString {
+    Style::new().fg(Color::Red).paint(text)
+}
+
+pub fn green<T: AsRef<str>>(text: T) -> ColoredString {
+    Style::new().fg(Color::Green).paint(text)
+}
+
+pub fn blue<T: AsRef<str>>(text: T) -> ColoredString {
+    Style::new().fg(Color::Blue).paint(text)
+}
+
+pub fn yellow<T: AsRef<str>>(text: T) -> ColoredString {
+    Style::new().fg(Color::Yellow).paint(text)
+}
+
+pub fn magenta<T: AsRef<str>>(text: T) -> ColoredString {
+    Style::new().fg(Color::Magenta).paint(text)
+}
+
+pub fn cyan<T: AsRef<str>>(text: T) -> ColoredString {
+    Style::new().fg(Color::Cyan).paint(text)
+}
+
+pub fn white<T: AsRef<str>>(text: T) -> ColoredString {
+    Style::new().fg(Color::White).paint(text)
+}
+
+pub fn black<T: AsRef<str>>(text: T) -> ColoredString {
+    Style::new().fg(Color::Black).paint(text)
+}

@@ -221,3 +221,20 @@ pub fn white<T: AsRef<str>>(text: T) -> ColoredString {
 pub fn black<T: AsRef<str>>(text: T) -> ColoredString {
     Style::new().fg(Color::Black).paint(text)
 }
+
+
+pub trait Colorize {
+    fn red(&self) -> ColoredString;
+    fn green(&self) -> ColoredString;
+    fn blue(&self) -> ColoredString;
+    fn yellow(&self) -> ColoredString;
+    fn magenta(&self) -> ColoredString;
+    fn cyan(&self) -> ColoredString;
+    fn white(&self) -> ColoredString;
+    fn black(&self) -> ColoredString;
+    fn bold(&self) -> ColoredString;
+    fn italic(&self) -> ColoredString;
+    fn underline(&self) -> ColoredString;
+    fn color(&self, color: Color) -> ColoredString;
+    fn bg_color(&self, color: Color) -> ColoredString;
+}

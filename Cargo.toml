@@ -2,7 +2,7 @@
 name = "whitelight"
 version = "0.1.0"
 edition = "2024"
-authors = ["Danil Merinov <danil.d.merinov@gmail.com>"]
+authors = ["Danil Merinov <danilmerinov9@gmail.com>"]
 description = "A simple library for coloring terminal text in Rust"
 license = "MIT"
 repository = "https://github.com/dan1lm/whitelight"

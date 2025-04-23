@@ -238,3 +238,58 @@ pub trait Colorize {
     fn color(&self, color: Color) -> ColoredString;
     fn bg_color(&self, color: Color) -> ColoredString;
 }
+
+
+impl<T: AsRef<str>> Colorize for T {
+    fn red(&self) -> ColoredString {
+        red(self)
+    }
+
+    fn green(&self) -> ColoredString {
+        green(self)
+    }
+
+    fn blue(&self) -> ColoredString {
+        blue(self)
+    }
+
+    fn yellow(&self) -> ColoredString {
+        yellow(self)
+    }
+
+    fn magenta(&self) -> ColoredString {
+        magenta(self)
+    }
+
+    fn cyan(&self) -> ColoredString {
+        cyan(self)
+    }
+
+    fn white(&self) -> ColoredString {
+        white(self)
+    }
+
+    fn black(&self) -> ColoredString {
+        black(self)
+    }
+
+    fn bold(&self) -> ColoredString {
+        Style::new().bold().paint(self)
+    }
+
+    fn italic(&self) -> ColoredString {
+        Style::new().italic().paint(self)
+    }
+
+    fn underline(&self) -> ColoredString {
+        Style::new().underline().paint(self)
+    }
+
+    fn color(&self, color: Color) -> ColoredString {
+        Style::new().fg(color).paint(self)
+    }
+
+    fn bg_color(&self, color: Color) -> ColoredString {
+        Style::new().bg(color).paint(self)
+    }
+}

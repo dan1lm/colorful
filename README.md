@@ -1,4 +1,4 @@
-# white_light
+# whitelight
 
 "White light is visible light that contains all the colors of the visible spectrum combined in roughly equal proportions"
 

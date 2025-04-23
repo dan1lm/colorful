@@ -47,7 +47,7 @@ impl Color {
     }
 
     // background color
-    fn bg_code(&self) -> {
+    fn bg_code(&self) -> u8 {
 
         match self {
             Color::Black => 40,
@@ -294,6 +294,11 @@ impl<T: AsRef<str>> Colorize for T {
     }
 }
 
+impl AsRef<str> for ColoredString {
+    fn as_ref(&self) -> &str {
+        &self.text
+    }
+}
 
 #[cfg(test)]
 mod tests {

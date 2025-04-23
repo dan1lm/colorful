@@ -5,12 +5,3 @@ version = 4
 [[package]]
 name = "colorful"
 version = "0.1.0"
-dependencies = [
- "colorful 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "colorful"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "04ac44698f1063dc9a5f929d4394b91253db780138917cdd17f72b451aa48b80"

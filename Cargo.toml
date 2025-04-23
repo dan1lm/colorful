@@ -2,6 +2,15 @@
 name = "colorful"
 version = "0.1.0"
 edition = "2024"
+authors = ["Danil Merinov <danil.d.merinov@gmail.com>"]
+description = "A simple library for coloring terminal text in Rust"
+license = "MIT"
+repository = "https://github.com/dan1lm/colorful"
+keywords = ["terminal", "color", "cli"]
+categories = ["command-line-interface"]
 
-[dependencies]
-colorful = "0.1.0"
+[lib]
+name="colorful"
+path="src/lib.rs"
+
+

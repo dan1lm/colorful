@@ -170,3 +170,9 @@ impl Style {
     }
 
 }
+
+#[derive(Debug, Clone)]
+pub struct ColoredString {
+    text: String,
+    style: Style,
+}
